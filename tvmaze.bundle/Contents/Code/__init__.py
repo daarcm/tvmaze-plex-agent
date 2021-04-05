@@ -210,14 +210,16 @@ class TVmazeAgent(Agent.TV_Shows):
             # Download the episode thumbnail
             valid_names = list()
 
-            if ep.image.get('original'):
-                thumb_url = ep.image.get('original')
-                if thumb_url is not None and len(thumb_url) > 0:
-                    # Check that the thumb doesn't already exist before downloading it
-                    valid_names.append(thumb_url)
-                    if thumb_url not in episode.thumbs:
-                        try:
-                            episode.thumbs[thumb_url] = Proxy.Media(HTTP.Request(thumb_url).content)
-                        except:
-                            # tvmaze doesn't have a thumb for this show
-                            pass
+            # Get episode poster if it exists
+            if ep.image:
+                if ep.image.get('original'):
+                    thumb_url = ep.image.get('original')
+                    if thumb_url is not None and len(thumb_url) > 0:
+                        # Check that the thumb doesn't already exist before downloading it
+                        valid_names.append(thumb_url)
+                        if thumb_url not in episode.thumbs:
+                            try:
+                                episode.thumbs[thumb_url] = Proxy.Media(HTTP.Request(thumb_url).content)
+                            except:
+                                # tvmaze doesn't have a thumb for this show
+                                pass
